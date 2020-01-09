@@ -1,2 +1,2 @@
 # 创建镜像
-docker build -t haozi/ubuntu .
+docker build -t haozhi/ubuntu .

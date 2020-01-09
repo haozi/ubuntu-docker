@@ -1,1 +1,1 @@
-docker exec -it haozi/ubuntu /bin/zsh
+docker exec -it ubuntu /bin/zsh
