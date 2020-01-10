@@ -27,7 +27,7 @@ RUN echo '--- install node ---' && \
     sudo apt-get install -y zsh && \
     sudo chsh -s /bin/zsh && \
     sudo rm -rf /var/cache/apt/archives/lock /var/cache/apt/archives /var/lib/apt/lists/lock /var/lib/apt/lists && \
-    curl -sL https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sudo -E zsh || true && \
+    curl -sL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sudo -E zsh || true && \
     echo '--- config ---' && \
     git config --global alias.co checkout && \
     git config --global alias.br branch && \
