@@ -14,5 +14,5 @@
 - [x] Time Zone UTC+08:00
 
 ```bash
-docker run --name="ubuntu" -it --rm haozhi/ubuntu  /bin/zsh
+docker run --name='ubuntu' --hostname='ubuntu' -it --rm haozhi/ubuntu /bin/zsh
 ```
