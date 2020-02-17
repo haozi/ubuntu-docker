@@ -11,7 +11,7 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     \
     echo '--- install node ---' && \
-    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash && \
     apt-get install -y nodejs && \
     npm install -g yarn --registry=https://registry.npm.taobao.org && \
     apt-get clean && \
@@ -24,7 +24,9 @@ USER ubuntu
 
 WORKDIR /home/ubuntu
 
-RUN curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash && \
+RUN echo '--- install nvm ---' && \
+    cd ~ && git clone --depth=1 https://github.com/nvm-sh/nvm.git .nvm && \
+    cd ~/.nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \
     \
     echo '--- install zsh ---' && \
     sudo rm -rf /var/cache/apt/archives/lock /var/cache/apt/archives /var/lib/apt/lists/lock /var/lib/apt/lists && \
@@ -37,12 +39,18 @@ RUN curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | b
     git config --global alias.br branch && \
     git config --global alias.ci commit && \
     git config --global alias.st status && \
-    sudo chown -R ubuntu:ubuntu ~ && \
     echo 'set number' > ~/.vimrc && \
     \
-    echo '--- clean ---' && \
-    sudo npm cache verify && sudo apt-get clean && yarn cache clean
-
+    \
+    echo 'cd ~ \n\
+zsh -c ". ~/.zshrc" \n\
+cd ~/.nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \n\
+sudo npm install -g yarn --registry=https://registry.npm.taobao.org \n\
+rm -rf ~/.zcompdump* && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
+    \
+    \
+zsh ~/.upgrade_system.sh && \
+sudo chown -R ubuntu:ubuntu ~
 
 COPY --chown=ubuntu:ubuntu ./.zshrc /home/ubuntu/.zshrc
 
