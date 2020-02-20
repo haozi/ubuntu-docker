@@ -18,20 +18,41 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     \
     \
     adduser --gecos '' --disabled-password ubuntu && \
-    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+    echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd && \
+    \
+    echo '--- install nvm ---' && \
+    cd /home/ubuntu && git clone --depth=1 https://github.com/nvm-sh/nvm.git .nvm && \
+    cd .nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \
+    echo '--- install ohmyzsh ---' && \
+    cd /home/ubuntu && git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh && \
+    chown -R ubuntu:ubuntu .
 
 USER ubuntu
 
 WORKDIR /home/ubuntu
 
-RUN echo '--- install nvm ---' && \
-    cd ~ && git clone --depth=1 https://github.com/nvm-sh/nvm.git .nvm && \
-    cd ~/.nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \
+RUN echo 'export PATH=$HOME/bin:/usr/local/bin:$PATH \n\
+export ZSH="/home/ubuntu/.oh-my-zsh" \n\
+\n\
+ZSH_THEME="simple" \n\
+plugins=(git history autojump) \n\
+\n\
+export LANG=en_US.UTF-8 \n\
+\n\
+export NVM_DIR="$HOME/.nvm" \n\
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \n\
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \n\
+\n\
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" \n\
+source $ZSH/oh-my-zsh.sh \n' > ~/.zshrc && zsh -c '. ~/.zshrc' && \
     \
-    echo '--- install zsh ---' && \
-    sudo rm -rf /var/cache/apt/archives/lock /var/cache/apt/archives /var/lib/apt/lists/lock /var/lib/apt/lists && \
-    curl -sL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | sudo -E zsh || true && \
     \
+    echo 'export NVM_DIR="$HOME/.nvm" \n\
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \n\
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \n\
+\n\
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" \n\
+/bin/zsh' >> ~/.bashrc && sudo rm -rf /bin/sh && sudo ln -s /bin/bash /bin/sh && \
     echo '--- config ---' && \
     yarn config set registry https://registry.npm.taobao.org && \
     npm config set registry https://registry.npm.taobao.org && \
@@ -44,15 +65,13 @@ RUN echo '--- install nvm ---' && \
     \
     echo 'cd ~ \n\
 zsh -c ". ~/.zshrc" \n\
-cd ~/.nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \n\
+cd ~/.nvm && git fetch --depth=1 --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \n\
 sudo npm install -g yarn --registry=https://registry.npm.taobao.org \n\
 rm -rf ~/.zcompdump* && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
     \
     \
 zsh ~/.upgrade_system.sh && \
 sudo chown -R ubuntu:ubuntu ~
-
-COPY --chown=ubuntu:ubuntu ./.zshrc /home/ubuntu/.zshrc
 
 LABEL name='ubuntu' version='1.0' description='Ubuntu 浅度定制版' by='haozi'
 
