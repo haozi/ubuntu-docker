@@ -22,7 +22,7 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     \
     echo '--- install nvm ---' && \
     cd /home/ubuntu && git clone --depth=1 https://github.com/nvm-sh/nvm.git .nvm && \
-    cd .nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \
+    cd .nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && rm -rf .git && cd - \
     echo '--- install ohmyzsh ---' && \
     cd /home/ubuntu && git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh && \
     chown -R ubuntu:ubuntu .
@@ -65,7 +65,6 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" 
     \
     echo 'cd ~ \n\
 zsh -c ". ~/.zshrc" \n\
-cd ~/.nvm && git fetch --depth=1 --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && cd - \n\
 sudo npm install -g yarn --registry=https://registry.npm.taobao.org \n\
 rm -rf ~/.zcompdump* && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
     \
