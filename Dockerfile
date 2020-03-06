@@ -14,7 +14,6 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     curl -sL https://deb.nodesource.com/setup_12.x | bash && \
     apt-get install -y nodejs && \
     npm install -g yarn --registry=https://registry.npm.taobao.org && \
-    apt-get clean && \
     \
     \
     adduser --gecos '' --disabled-password ubuntu && \
@@ -25,7 +24,8 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     cd .nvm && git fetch --tags && git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" && rm -rf .git && cd - \
     echo '--- install ohmyzsh ---' && \
     cd /home/ubuntu && git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git .oh-my-zsh && \
-    chown -R ubuntu:ubuntu .
+    chown -R ubuntu:ubuntu . && \
+    apt-get clean && npm cache clean -f && npm cache verify && yarn cache clean
 
 USER ubuntu
 
@@ -35,6 +35,7 @@ RUN echo 'export PATH=$HOME/bin:/usr/local/bin:$PATH \n\
 export ZSH="/home/ubuntu/.oh-my-zsh" \n\
 \n\
 ZSH_THEME="simple" \n\
+DISABLE_AUTO_UPDATE="true" \n\
 plugins=(git history autojump) \n\
 \n\
 export LANG=en_US.UTF-8 \n\
@@ -65,11 +66,10 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" 
     \
     echo 'cd ~ \n\
 zsh -c ". ~/.zshrc" \n\
-sudo npm install -g yarn --registry=https://registry.npm.taobao.org \n\
-rm -rf ~/.zcompdump* && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
+sudo npm install -g npm yarn --registry=https://registry.npm.taobao.org \n\
+rm -rf ~/.zcompdump* && sudo npm cache clean -f && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
     \
     \
-zsh ~/.upgrade_system.sh && \
 sudo chown -R ubuntu:ubuntu ~
 
 LABEL name='ubuntu' version='1.0' description='Ubuntu 浅度定制版' by='haozi'

@@ -2,13 +2,13 @@
 
 ## Feature
 
-- [x] Ubuntu@18.04.3
+- [x] Ubuntu
 - [x] Aliyun mirror
 - [x] Non-root User
 - [x] Wget
 - [x] cURL
 - [x] Oh My Zsh
-- [x] Node.js@12.14.1 / Yarn / NVM
+- [x] Node.js / Yarn / NVM
 - [x] Git
 - [x] autojump
 - [x] Time Zone UTC+08:00
