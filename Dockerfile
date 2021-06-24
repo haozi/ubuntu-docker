@@ -11,9 +11,10 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     \
     echo '--- install node ---' && \
-    curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash && \
     apt-get install -y nodejs && \
     npm install -g yarn --registry=https://registry.npm.taobao.org && \
+    npm install -g pnpm --registry=https://registry.npm.taobao.org && \
     \
     \
     adduser --gecos '' --disabled-password ubuntu && \

@@ -8,7 +8,7 @@
 - [x] Wget
 - [x] cURL
 - [x] Oh My Zsh
-- [x] Node.js / Yarn / NVM
+- [x] Node.js / Yarn / PNPM / NVM
 - [x] Git
 - [x] autojump
 - [x] Time Zone UTC+08:00
