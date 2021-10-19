@@ -1,5 +1,6 @@
 # Ubuntu 浅度定制版
 
+> 最后更新 2021-10-19
 ## Feature
 
 - [x] Ubuntu
