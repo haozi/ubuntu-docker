@@ -11,10 +11,10 @@ RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list &
     ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     \
     echo '--- install node ---' && \
-    curl -sL https://deb.nodesource.com/setup_14.x | bash && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash && \
     apt-get install -y nodejs && \
-    npm install -g yarn --registry=https://registry.npm.taobao.org && \
-    npm install -g pnpm --registry=https://registry.npm.taobao.org && \
+    npm install -g yarn --registry=https://registry.npmmirror.com && \
+    npm install -g pnpm --registry=https://registry.npmmirror.com && \
     \
     \
     adduser --gecos '' --disabled-password ubuntu && \
@@ -56,8 +56,8 @@ source $ZSH/oh-my-zsh.sh \n' > ~/.zshrc && zsh -c '. ~/.zshrc' && \
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" \n\
 /bin/zsh' >> ~/.bashrc && sudo rm -rf /bin/sh && sudo ln -s /bin/bash /bin/sh && \
     echo '--- config ---' && \
-    yarn config set registry https://registry.npm.taobao.org && \
-    npm config set registry https://registry.npm.taobao.org && \
+    yarn config set registry https://registry.npmmirror.com && \
+    npm config set registry https://registry.npmmirror.com && \
     git config --global alias.co checkout && \
     git config --global alias.br branch && \
     git config --global alias.ci commit && \
@@ -67,7 +67,7 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH" 
     \
     echo 'cd ~ \n\
 zsh -c ". ~/.zshrc" \n\
-sudo npm install -g npm yarn --registry=https://registry.npm.taobao.org \n\
+sudo npm install -g npm yarn --registry=https://registry.npmmirror.com \n\
 rm -rf ~/.zcompdump* && sudo npm cache clean -f && sudo npm cache verify && sudo apt-get clean && yarn cache clean'> ~/.upgrade_system.sh && \
     \
     \
