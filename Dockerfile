@@ -3,7 +3,7 @@ FROM ubuntu
 RUN sed -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list && \
     apt-get update && \
     \
-    apt-get install -y sudo curl wget git autojump zsh vim && \
+    apt-get install -y sudo curl wget unzip git autojump zsh vim && \
     chsh -s /bin/zsh && \
     \
     echo '--- set timezone ---' && \
